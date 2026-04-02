@@ -1,0 +1,378 @@
+/* pages/flight/flight.wxss */
+
+/* 行程类型 */
+.trip-type {
+  display: flex;
+  background-color: var(--bg-primary);
+  border-radius: 12rpx;
+  padding: 6rpx;
+  margin-bottom: 30rpx;
+}
+
+.type-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: var(--text-secondary);
+  border-radius: 10rpx;
+  transition: all 0.3s;
+}
+
+.type-item.active {
+  background-color: var(--primary-color);
+  color: #fff;
+  font-weight: 500;
+}
+
+/* 城市选择行 */
+.city-row {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.city-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.city-label {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  margin-bottom: 8rpx;
+}
+
+.city-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.city-airport {
+  font-size: 22rpx;
+  color: var(--text-hint);
+  margin-top: 4rpx;
+}
+
+.city-swap {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  border-radius: 50%;
+  margin: 0 20rpx;
+}
+
+.swap-icon {
+  width: 32rpx;
+  height: 32rpx;
+  opacity: 0.6;
+}
+
+/* 日期选择 */
+.date-row {
+  display: flex;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.date-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.date-label {
+  font-size: 24rpx;
+  color: var(--text-hint);
+  margin-bottom: 8rpx;
+}
+
+.date-value {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* 乘客选择 */
+.passenger-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.passenger-label {
+  font-size: 24rpx;
+  color: var(--text-hint);
+}
+
+.passenger-value {
+  font-size: 28rpx;
+  color: var(--text-primary);
+}
+
+.arrow-icon {
+  width: 24rpx;
+  height: 24rpx;
+  opacity: 0.4;
+}
+
+/* 舱位选择 */
+.cabin-row {
+  display: flex;
+  padding-top: 24rpx;
+  gap: 16rpx;
+}
+
+.cabin-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
+  border-radius: 10rpx;
+  border: 2rpx solid var(--border-color);
+}
+
+.cabin-item.active {
+  background-color: rgba(74, 144, 217, 0.1);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 搜索按钮 */
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  padding: 30rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  margin: 40rpx 0;
+  box-shadow: 0 8rpx 24rpx rgba(74, 144, 217, 0.3);
+}
+
+.search-btn:active {
+  transform: scale(0.98);
+}
+
+.btn-icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 16rpx;
+}
+
+/* 插件卡片 */
+.plugin-card {
+  background: linear-gradient(135deg, #FF6B35, #FF8F5C);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  color: #fff;
+}
+
+.plugin-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.plugin-logo {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+  background-color: rgba(255,255,255,0.3);
+}
+
+.plugin-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  display: block;
+}
+
+.plugin-desc {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.plugin-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+/* 搜索结果 */
+.results-section {
+  margin-top: 20rpx;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.results-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: var(--primary-color);
+}
+
+.filter-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 8rpx;
+}
+
+/* 航班卡片 */
+.flight-card {
+  background-color: var(--bg-card);
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.flight-main {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.flight-time {
+  flex: 1;
+  text-align: center;
+}
+
+.flight-time .time {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+}
+
+.flight-time .airport {
+  font-size: 22rpx;
+  color: var(--text-hint);
+  margin-top: 8rpx;
+  display: block;
+}
+
+.flight-duration {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.duration-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 8rpx;
+}
+
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+}
+
+.line {
+  flex: 1;
+  height: 2rpx;
+  background-color: var(--border-color);
+  margin: 0 8rpx;
+}
+
+.duration-text {
+  font-size: 22rpx;
+  color: var(--text-hint);
+}
+
+.stop-text {
+  font-size: 20rpx;
+  color: var(--warning-color);
+  margin-top: 4rpx;
+}
+
+.direct-text {
+  font-size: 20rpx;
+  color: var(--success-color);
+  margin-top: 4rpx;
+}
+
+.flight-info {
+  display: flex;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.airline-logo {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 16rpx;
+}
+
+.airline-name {
+  flex: 1;
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.flight-price {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100rpx 0;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.6;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: var(--text-hint);
+}

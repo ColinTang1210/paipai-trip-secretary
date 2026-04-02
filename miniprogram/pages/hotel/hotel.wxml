@@ -1,0 +1,123 @@
+<!--pages/hotel/hotel.wxml - 酒店查询页面-->
+<view class="container">
+  <!-- 搜索表单 -->
+  <view class="card">
+    <!-- 目的地 -->
+    <view class="input-row" bindtap="selectDestination">
+      <text class="input-label">目的地</text>
+      <view class="input-value-wrapper">
+        <text class="input-value {{destination ? '' : 'placeholder'}}">{{destination || '请选择目的地'}}</text>
+        <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <!-- 入住退房日期 -->
+    <view class="date-picker-row">
+      <view class="date-picker-item" bindtap="selectCheckIn">
+        <text class="date-label">入住</text>
+        <text class="date-value">{{checkInDate || '请选择'}}</text>
+      </view>
+      <view class="date-nights">
+        <text>{{nights}}晚</text>
+      </view>
+      <view class="date-picker-item" bindtap="selectCheckOut">
+        <text class="date-label">退房</text>
+        <text class="date-value">{{checkOutDate || '请选择'}}</text>
+      </view>
+    </view>
+
+    <!-- 房间数量 -->
+    <view class="input-row" bindtap="selectRooms">
+      <text class="input-label">房间/人数</text>
+      <view class="input-value-wrapper">
+        <text class="input-value">{{rooms}}间房 · {{guests}}位成人</text>
+        <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <!-- 关键词搜索 -->
+    <view class="keyword-search">
+      <input class="keyword-input" placeholder="酒店名称/位置/品牌" value="{{keyword}}" bindinput="onKeywordInput" />
+    </view>
+  </view>
+
+  <!-- 搜索按钮 -->
+  <button class="search-btn" bindtap="searchHotels">
+    <image class="btn-icon" src="/assets/icons/search-white.png" mode="aspectFit"></image>
+    <text>搜索酒店</text>
+  </button>
+
+  <!-- 飞猪 AI Fly 酒店入口 -->
+  <view class="plugin-card hotel-plugin" bindtap="openFlyPigAIHotel">
+    <view class="plugin-header">
+      <image class="plugin-logo" src="/assets/icons/flypig-logo.png" mode="aspectFit"></image>
+      <view class="plugin-info">
+        <text class="plugin-name">飞猪 AI 酒店助手</text>
+        <text class="plugin-desc">智能推荐最适合你的酒店</text>
+      </view>
+    </view>
+    <view class="plugin-action">
+      <text>AI帮你选酒店</text>
+      <text class="arrow">→</text>
+    </view>
+  </view>
+
+  <!-- 筛选条件 -->
+  <view class="filter-bar" wx:if="{{hotelList.length > 0}}">
+    <view class="filter-item {{activeFilter === 'price' ? 'active' : ''}}" bindtap="filterByPrice">
+      <text>价格</text>
+      <image class="filter-arrow" src="/assets/icons/arrow-down.png" mode="aspectFit"></image>
+    </view>
+    <view class="filter-item {{activeFilter === 'rating' ? 'active' : ''}}" bindtap="filterByRating">
+      <text>评分</text>
+      <image class="filter-arrow" src="/assets/icons/arrow-down.png" mode="aspectFit"></image>
+    </view>
+    <view class="filter-item {{activeFilter === 'star' ? 'active' : ''}}" bindtap="filterByStar">
+      <text>星级</text>
+      <image class="filter-arrow" src="/assets/icons/arrow-down.png" mode="aspectFit"></image>
+    </view>
+    <view class="filter-item" bindtap="showAllFilters">
+      <text>筛选</text>
+      <image class="filter-icon" src="/assets/icons/filter.png" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 酒店列表 -->
+  <view class="hotel-list" wx:if="{{hotelList.length > 0}}">
+    <view class="hotel-card" wx:for="{{hotelList}}" wx:key="id" bindtap="selectHotel" data-item="{{item}}">
+      <image class="hotel-image" src="{{item.image}}" mode="aspectFill"></image>
+      <view class="hotel-info">
+        <text class="hotel-name">{{item.name}}</text>
+        <view class="hotel-rating">
+          <text class="rating-score">{{item.rating}}</text>
+          <text class="rating-text">{{item.ratingText}}</text>
+          <text class="review-count">{{item.reviewCount}}条点评</text>
+        </view>
+        <view class="hotel-location">
+          <image class="location-icon" src="/assets/icons/location.png" mode="aspectFit"></image>
+          <text>{{item.location}}</text>
+        </view>
+        <view class="hotel-tags">
+          <text class="hotel-tag" wx:for="{{item.tags}}" wx:key="*this" wx:for-item="tag">{{tag}}</text>
+        </view>
+        <view class="hotel-price-row">
+          <text class="price-label">¥</text>
+          <text class="price-value">{{item.price}}</text>
+          <text class="price-unit">/晚起</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{searched && hotelList.length === 0}}">
+    <image class="empty-icon" src="/assets/icons/empty-hotel.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无符合条件的酒店</text>
+    <text class="empty-hint">请尝试修改搜索条件</text>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>正在搜索...</text>
+  </view>
+</view>

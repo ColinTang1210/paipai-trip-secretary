@@ -1,0 +1,9 @@
+{
+  "name": "flightSearch",
+  "version": "1.0.0",
+  "description": "机票搜索云函数",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

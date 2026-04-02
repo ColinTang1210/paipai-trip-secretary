@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/flight/flight",
+    "pages/hotel/hotel",
+    "pages/tax/tax",
+    "pages/mine/mine"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4A90D9",
+    "navigationBarTitleText": "派派trip秘书",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4A90D9",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/flight/flight",
+        "text": "机票",
+        "iconPath": "assets/icons/flight.png",
+        "selectedIconPath": "assets/icons/flight-active.png"
+      },
+      {
+        "pagePath": "pages/hotel/hotel",
+        "text": "酒店",
+        "iconPath": "assets/icons/hotel.png",
+        "selectedIconPath": "assets/icons/hotel-active.png"
+      },
+      {
+        "pagePath": "pages/tax/tax",
+        "text": "税率",
+        "iconPath": "assets/icons/tax.png",
+        "selectedIconPath": "assets/icons/tax-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "assets/icons/mine.png",
+        "selectedIconPath": "assets/icons/mine-active.png"
+      }
+    ]
+  },
+  "plugins": {
+    "flyPigAI": {
+      "version": "1.0.0",
+      "provider": "wxappIdOfFlyPigAI"
+    },
+    "crossBorder": {
+      "version": "1.0.0",
+      "provider": "wxappIdOfCrossBorder"
+    }
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于查询附近的机票和酒店"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation"
+  ],
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

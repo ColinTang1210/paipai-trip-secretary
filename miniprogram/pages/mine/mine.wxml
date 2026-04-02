@@ -1,0 +1,124 @@
+<!--pages/mine/mine.wxml - 个人中心页面-->
+<view class="container">
+  <!-- 用户信息 -->
+  <view class="user-section">
+    <view class="user-info" bindtap="onUserTap">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-text" wx:if="{{userInfo}}">
+        <text class="nickname">{{userInfo.nickName}}</text>
+        <text class="user-id">ID: {{userInfo.openId || '未登录'}}</text>
+      </view>
+      <view class="user-text" wx:else>
+        <text class="nickname">点击登录</text>
+        <text class="login-hint">登录后享受更多服务</text>
+      </view>
+      <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 会员卡片 -->
+  <view class="member-card">
+    <view class="member-info">
+      <text class="member-level">{{memberInfo.levelName}}</text>
+      <text class="member-points">{{memberInfo.points}} 积分</text>
+    </view>
+    <view class="member-benefits">
+      <view class="benefit-item" wx:for="{{memberInfo.benefits}}" wx:key="*this">
+        <text>{{item}}</text>
+      </view>
+    </view>
+    <view class="member-action" bindtap="onMemberTap">
+      <text>会员中心</text>
+      <text class="arrow">→</text>
+    </view>
+  </view>
+
+  <!-- 订单入口 -->
+  <view class="order-section">
+    <view class="section-header">
+      <text class="section-title">我的订单</text>
+      <view class="section-more" bindtap="goToOrders">
+        <text>全部订单</text>
+        <image class="arrow-icon-small" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="order-types">
+      <view class="order-type" bindtap="goToOrders" data-type="pending">
+        <view class="order-icon-wrapper">
+          <image class="order-icon" src="/assets/icons/order-pending.png" mode="aspectFit"></image>
+          <view class="order-badge" wx:if="{{orderCounts.pending > 0}}">{{orderCounts.pending}}</view>
+        </view>
+        <text class="order-text">待付款</text>
+      </view>
+      <view class="order-type" bindtap="goToOrders" data-type="paid">
+        <view class="order-icon-wrapper">
+          <image class="order-icon" src="/assets/icons/order-paid.png" mode="aspectFit"></image>
+          <view class="order-badge" wx:if="{{orderCounts.paid > 0}}">{{orderCounts.paid}}</view>
+        </view>
+        <text class="order-text">待出行</text>
+      </view>
+      <view class="order-type" bindtap="goToOrders" data-type="completed">
+        <view class="order-icon-wrapper">
+          <image class="order-icon" src="/assets/icons/order-completed.png" mode="aspectFit"></image>
+        </view>
+        <text class="order-text">已完成</text>
+      </view>
+      <view class="order-type" bindtap="goToOrders" data-type="refund">
+        <view class="order-icon-wrapper">
+          <image class="order-icon" src="/assets/icons/order-refund.png" mode="aspectFit"></image>
+        </view>
+        <text class="order-text">退款/售后</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-section">
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goToPage" data-page="favorites">
+        <image class="menu-icon" src="/assets/icons/favorite.png" mode="aspectFit"></image>
+        <text class="menu-text">我的收藏</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-item" bindtap="goToPage" data-page="history">
+        <image class="menu-icon" src="/assets/icons/history.png" mode="aspectFit"></image>
+        <text class="menu-text">浏览历史</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-item" bindtap="goToPage" data-page="passengers">
+        <image class="menu-icon" src="/assets/icons/passenger.png" mode="aspectFit"></image>
+        <text class="menu-text">常用乘客</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-item" bindtap="goToPage" data-page="address">
+        <image class="menu-icon" src="/assets/icons/address.png" mode="aspectFit"></image>
+        <text class="menu-text">收货地址</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+
+    <view class="menu-group">
+      <view class="menu-item" bindtap="goToPage" data-page="settings">
+        <image class="menu-icon" src="/assets/icons/settings.png" mode="aspectFit"></image>
+        <text class="menu-text">设置</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-item" bindtap="goToPage" data-page="help">
+        <image class="menu-icon" src="/assets/icons/help.png" mode="aspectFit"></image>
+        <text class="menu-text">帮助与反馈</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+      <view class="menu-item" bindtap="goToPage" data-page="about">
+        <image class="menu-icon" src="/assets/icons/about.png" mode="aspectFit"></image>
+        <text class="menu-text">关于我们</text>
+        <image class="menu-arrow" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 客服入口 -->
+  <view class="customer-service" bindtap="contactService">
+    <image class="service-icon" src="/assets/icons/customer-service.png" mode="aspectFit"></image>
+    <text class="service-text">联系客服</text>
+  </view>
+</view>
