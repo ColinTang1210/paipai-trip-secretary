@@ -53,11 +53,11 @@
   "plugins": {
     "flyPigAI": {
       "version": "1.0.0",
-      "provider": "wxappIdOfFlyPigAI"
+      "provider": "wx1234567890abcdef"
     },
     "crossBorder": {
       "version": "1.0.0",
-      "provider": "wxappIdOfCrossBorder"
+      "provider": "wxabcdef1234567890"
     }
   },
   "permission": {

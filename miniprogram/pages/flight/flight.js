@@ -1,18 +1,20 @@
 // pages/flight/flight.js
 const app = getApp();
+const flyai = require('../../utils/flyai');
 
 Page({
   data: {
-    tripType: 'round', // round: 往返, one: 单程
+    tripType: 'round',
     fromCity: { name: '北京', code: 'BJS', airport: '首都国际机场' },
     toCity: null,
     departDate: '',
     returnDate: '',
     passengerCount: 1,
-    cabinClass: 'economy', // economy: 经济舱, business: 商务舱, first: 头等舱
+    cabinClass: 'economy',
     flightList: [],
     searched: false,
-    loading: false
+    loading: false,
+    pluginAvailable: false
   },
 
   onLoad(options) {
@@ -20,6 +22,10 @@ Page({
     const tomorrow = this.formatDate(new Date(Date.now() + 86400000));
     this.setData({ departDate: tomorrow });
     
+    // 检查飞猪插件是否可用
+    const pluginAvailable = flyai.isPluginAvailable();
+    this.setData({ pluginAvailable });
+
     // 如果有传入目的地参数
     if (options.destination) {
       this.setData({ toCity: { name: options.destination } });
@@ -60,18 +66,8 @@ Page({
   // 选择日期
   selectDate(e) {
     const field = e.currentTarget.dataset.field;
-    const currentDate = this.data[field];
-    
-    wx.showDatePicker && wx.showDatePicker({
-      format: 'YYYY-MM-DD',
-      currentDate: currentDate,
-      success: (res) => {
-        this.setData({ [field]: res.dateString });
-      }
-    });
-    
-    // 如果系统不支持 showDatePicker，使用选择器组件
-    // 这里简化处理，实际项目需要引入日期选择器组件
+    // 实际项目中应使用日期选择器组件
+    wx.showToast({ title: '请使用日期选择器', icon: 'none' });
   },
 
   // 选择乘客数量
@@ -86,7 +82,7 @@ Page({
 
   // 搜索机票
   async searchFlights() {
-    const { fromCity, toCity, departDate } = this.data;
+    const { fromCity, toCity, departDate, passengerCount, cabinClass } = this.data;
     
     if (!fromCity || !toCity) {
       wx.showToast({ title: '请选择出发和到达城市', icon: 'none' });
@@ -101,22 +97,24 @@ Page({
     this.setData({ loading: true, searched: true });
 
     try {
-      // 调用云函数搜索机票
-      const res = await wx.cloud.callFunction({
-        name: 'flightSearch',
-        data: {
-          from: fromCity.code,
-          to: toCity.code,
-          date: departDate,
-          passengers: this.data.passengerCount,
-          cabin: this.data.cabinClass
-        }
+      // 调用飞猪 AI Fly 搜索机票
+      const result = await flyai.searchFlights({
+        fromCity: fromCity.code || fromCity.name,
+        toCity: toCity.code || toCity.name,
+        departDate,
+        returnDate: this.data.tripType === 'round' ? this.data.returnDate : null,
+        passengers: passengerCount,
+        cabinClass
       });
 
       this.setData({
-        flightList: res.result.data || [],
+        flightList: result.data || [],
         loading: false
       });
+
+      if (result.data && result.data.length === 0) {
+        wx.showToast({ title: '未找到符合条件的航班', icon: 'none' });
+      }
     } catch (err) {
       console.error('搜索机票失败:', err);
       wx.showToast({ title: '搜索失败，请重试', icon: 'none' });
@@ -126,28 +124,80 @@ Page({
 
   // 打开飞猪 AI Fly 插件
   openFlyPigAI() {
-    // 调用飞猪 AI Fly 插件
-    const plugin = requirePlugin('flyPigAI');
-    // 根据插件文档调用相应接口
-    wx.showToast({ title: '正在打开飞猪 AI Fly...', icon: 'loading' });
+    // 直接打开插件机票页面
+    flyai.openFlightPage();
+  },
+
+  // 使用 AI 推荐航班
+  async getAIRecommendation() {
+    const { fromCity, toCity, departDate } = this.data;
     
-    // 示例：打开插件页面
-    // wx.navigateTo({
-    //   url: 'plugin://flyPigAI/index'
-    // });
+    if (!fromCity || !toCity || !departDate) {
+      wx.showToast({ title: '请先填写搜索条件', icon: 'none' });
+      return;
+    }
+
+    wx.showLoading({ title: 'AI 分析中...' });
+
+    try {
+      const result = await flyai.getAIRecommendation({
+        destination: toCity.name,
+        budget: 2000,
+        duration: 5
+      });
+
+      wx.hideLoading();
+
+      if (result.success) {
+        wx.showModal({
+          title: 'AI 推荐',
+          content: result.data.recommendation || '暂无推荐',
+          showCancel: false
+        });
+      } else {
+        wx.showToast({ title: result.message, icon: 'none' });
+      }
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: 'AI 推荐暂时不可用', icon: 'none' });
+    }
   },
 
   // 选择航班
   selectFlight(e) {
     const item = e.currentTarget.dataset.item;
     wx.navigateTo({
-      url: `/pages/flight-detail/flight-detail?flightNo=${item.flightNo}`
+      url: `/pages/flight-detail/flight-detail?flightNo=${item.flightNo}&price=${item.price}`
     });
   },
 
   // 显示筛选
   showFilter() {
-    wx.showToast({ title: '筛选功能开发中', icon: 'none' });
+    wx.showActionSheet({
+      itemList: ['价格从低到高', '价格从高到低', '出发时间早→晚', '飞行时间短→长'],
+      success: (res) => {
+        const sorted = this.sortFlights(res.tapIndex);
+        this.setData({ flightList: sorted });
+      }
+    });
+  },
+
+  // 排序航班
+  sortFlights(sortType) {
+    const flights = [...this.data.flightList];
+    
+    switch (sortType) {
+      case 0: // 价格从低到高
+        return flights.sort((a, b) => a.price - b.price);
+      case 1: // 价格从高到低
+        return flights.sort((a, b) => b.price - a.price);
+      case 2: // 出发时间早→晚
+        return flights.sort((a, b) => a.departTime.localeCompare(b.departTime));
+      case 3: // 飞行时间短→长（简化处理）
+        return flights.sort((a, b) => a.stops - b.stops);
+      default:
+        return flights;
+    }
   },
 
   // 格式化日期
