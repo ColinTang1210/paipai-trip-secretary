@@ -3,6 +3,8 @@
   "appid": "wx0000000000000000",
   "description": "智能旅行助手小程序 - 机票酒店查询、跨境税率查询",
   "version": "1.0.0",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "urlCheck": true,
     "es6": true,
@@ -51,6 +53,5 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "cloudfunctionTemplateRoot": "cloudfunctions/",
-  "cloudbaseRoot": "cloudbaserc.json"
+  "simulatorPluginLibVersion": {}
 }

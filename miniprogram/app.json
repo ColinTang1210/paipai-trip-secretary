@@ -20,33 +20,23 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "首页",
-        "iconPath": "assets/icons/home.png",
-        "selectedIconPath": "assets/icons/home-active.png"
+        "text": "首页"
       },
       {
         "pagePath": "pages/flight/flight",
-        "text": "机票",
-        "iconPath": "assets/icons/flight.png",
-        "selectedIconPath": "assets/icons/flight-active.png"
+        "text": "机票"
       },
       {
         "pagePath": "pages/hotel/hotel",
-        "text": "酒店",
-        "iconPath": "assets/icons/hotel.png",
-        "selectedIconPath": "assets/icons/hotel-active.png"
+        "text": "酒店"
       },
       {
         "pagePath": "pages/tax/tax",
-        "text": "税率",
-        "iconPath": "assets/icons/tax.png",
-        "selectedIconPath": "assets/icons/tax-active.png"
+        "text": "税率"
       },
       {
         "pagePath": "pages/mine/mine",
-        "text": "我的",
-        "iconPath": "assets/icons/mine.png",
-        "selectedIconPath": "assets/icons/mine-active.png"
+        "text": "我的"
       }
     ]
   },
