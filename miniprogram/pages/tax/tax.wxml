@@ -1,150 +1,38 @@
-<!--pages/tax/tax.wxml - 税率查询页面-->
+<!--pages/tax/tax.wxml-->
 <view class="container">
-  <!-- 海关跨境通插件入口 -->
-  <view class="plugin-banner" bindtap="openCrossBorderPlugin">
-    <view class="plugin-content">
-      <image class="plugin-logo" src="/assets/icons/customs-logo.png" mode="aspectFit"></image>
-      <view class="plugin-text">
-        <text class="plugin-title">海关跨境通</text>
-        <text class="plugin-desc">官方权威税率查询</text>
-      </view>
-    </view>
-    <view class="plugin-action">
-      <text>立即查询</text>
-      <text class="arrow">→</text>
-    </view>
-  </view>
-
-  <!-- 税率查询表单 -->
   <view class="card">
-    <view class="card-title">税率查询</view>
+    <view class="card-title">💰 跨境税率查询</view>
     
-    <!-- 商品类型 -->
     <view class="input-row" bindtap="selectCategory">
       <text class="input-label">商品类型</text>
-      <view class="input-value-wrapper">
-        <text class="input-value {{category ? '' : 'placeholder'}}">{{category || '请选择商品类型'}}</text>
-        <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
-      </view>
+      <text class="input-value">{{category || '请选择'}}</text>
     </view>
-
-    <!-- 商品名称 -->
-    <view class="input-row">
-      <text class="input-label">商品名称</text>
-      <input class="input-field-inline" placeholder="请输入商品名称" value="{{productName}}" bindinput="onProductInput" />
-    </view>
-
-    <!-- 商品价格 -->
+    
     <view class="input-row">
       <text class="input-label">商品价格</text>
-      <view class="price-input-wrapper">
-        <input class="input-field-inline price-input" type="digit" placeholder="请输入价格" value="{{price}}" bindinput="onPriceInput" />
-        <text class="currency">{{currency}}</text>
-      </view>
-    </view>
-
-    <!-- 币种选择 -->
-    <view class="input-row" bindtap="selectCurrency">
-      <text class="input-label">币种</text>
-      <view class="input-value-wrapper">
-        <text class="input-value">{{currencyName}}</text>
-        <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
-      </view>
-    </view>
-
-    <!-- 购买国家/地区 -->
-    <view class="input-row" bindtap="selectCountry">
-      <text class="input-label">购买国家</text>
-      <view class="input-value-wrapper">
-        <text class="input-value {{country ? '' : 'placeholder'}}">{{country || '请选择'}}</text>
-        <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
-      </view>
+      <input class="price-input" type="digit" placeholder="请输入" value="{{price}}" bindinput="onPriceInput" />
     </view>
   </view>
 
-  <!-- 查询按钮 -->
-  <button class="query-btn" bindtap="queryTax">
-    <image class="btn-icon" src="/assets/icons/search-white.png" mode="aspectFit"></image>
-    <text>查询税率</text>
-  </button>
+  <button class="query-btn" bindtap="queryTax">🔍 查询税率</button>
 
-  <!-- 查询结果 -->
-  <view class="result-section" wx:if="{{taxResult}}">
-    <view class="result-card">
-      <view class="result-header">
-        <text class="result-title">税费计算结果</text>
-        <view class="result-badge">预估</view>
-      </view>
-
-      <view class="result-item">
-        <text class="result-label">商品价值</text>
-        <text class="result-value">{{taxResult.productValue}} {{currency}}</text>
-      </view>
-
-      <view class="result-item">
-        <text class="result-label">关税</text>
-        <text class="result-value">{{taxResult.tariff}} 元</text>
-      </view>
-
-      <view class="result-item">
-        <text class="result-label">增值税</text>
-        <text class="result-value">{{taxResult.vat}} 元</text>
-      </view>
-
-      <view class="result-item">
-        <text class="result-label">消费税</text>
-        <text class="result-value">{{taxResult.consumptionTax}} 元</text>
-      </view>
-
-      <view class="result-divider"></view>
-
-      <view class="result-item total">
-        <text class="result-label">应缴税费合计</text>
-        <text class="result-value total-value">¥{{taxResult.totalTax}}</text>
-      </view>
-
-      <view class="result-note">
-        <image class="note-icon" src="/assets/icons/info.png" mode="aspectFit"></image>
-        <text>{{taxResult.note}}</text>
-      </view>
+  <view class="result-card" wx:if="{{taxResult}}">
+    <view class="result-title">税费计算结果</view>
+    <view class="result-row">
+      <text>商品价值</text>
+      <text>{{taxResult.productValue}} 元</text>
     </view>
-
-    <!-- 税率详情 -->
-    <view class="tax-detail-card">
-      <view class="detail-title">税率详情</view>
-      <view class="detail-row">
-        <text class="detail-label">关税税率</text>
-        <text class="detail-value">{{taxResult.tariffRate}}%</text>
-      </view>
-      <view class="detail-row">
-        <text class="detail-label">增值税税率</text>
-        <text class="detail-value">{{taxResult.vatRate}}%</text>
-      </view>
-      <view class="detail-row">
-        <text class="detail-label">消费税税率</text>
-        <text class="detail-value">{{taxResult.consumptionRate}}%</text>
-      </view>
+    <view class="result-row">
+      <text>关税</text>
+      <text>{{taxResult.tariff}} 元</text>
     </view>
-
-    <!-- 免税额度提示 -->
-    <view class="allowance-card">
-      <view class="allowance-header">
-        <image class="allowance-icon" src="/assets/icons/tip.png" mode="aspectFit"></image>
-        <text class="allowance-title">免税额度提醒</text>
-      </view>
-      <text class="allowance-text">个人物品免税额度为 5000 元人民币，超出部分需缴纳关税。</text>
+    <view class="result-row">
+      <text>增值税</text>
+      <text>{{taxResult.vat}} 元</text>
     </view>
-  </view>
-
-  <!-- 常见商品税率 -->
-  <view class="section">
-    <view class="section-title">常见商品税率参考</view>
-    <view class="category-list">
-      <view class="category-item" wx:for="{{commonCategories}}" wx:key="id" bindtap="quickQuery" data-item="{{item}}">
-        <image class="category-icon" src="{{item.icon}}" mode="aspectFit"></image>
-        <text class="category-name">{{item.name}}</text>
-        <text class="category-rate">{{item.rate}}%</text>
-      </view>
+    <view class="result-row total">
+      <text>应缴税费</text>
+      <text class="total-price">¥{{taxResult.totalTax}}</text>
     </view>
   </view>
 </view>

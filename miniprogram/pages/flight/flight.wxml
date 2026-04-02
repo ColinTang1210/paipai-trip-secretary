@@ -1,122 +1,38 @@
-<!--pages/flight/flight.wxml - 机票查询页面-->
+<!--pages/flight/flight.wxml-->
 <view class="container">
-  <!-- 搜索表单 -->
   <view class="card">
-    <view class="trip-type">
-      <view class="type-item {{tripType === 'round' ? 'active' : ''}}" bindtap="setTripType" data-type="round">往返</view>
-      <view class="type-item {{tripType === 'one' ? 'active' : ''}}" bindtap="setTripType" data-type="one">单程</view>
+    <view class="card-title">✈️ 机票查询</view>
+    
+    <view class="input-row" bindtap="selectCity" data-field="from">
+      <text class="input-label">出发城市</text>
+      <text class="input-value">{{fromCity.name || '请选择'}}</text>
     </view>
-
-    <!-- 出发城市 -->
-    <view class="city-row">
-      <view class="city-item" bindtap="selectCity" data-field="from">
-        <text class="city-label">出发</text>
-        <text class="city-name">{{fromCity.name || '请选择'}}</text>
-        <text class="city-airport">{{fromCity.airport || ''}}</text>
-      </view>
-      <view class="city-swap" bindtap="swapCity">
-        <image class="swap-icon" src="/assets/icons/swap.png" mode="aspectFit"></image>
-      </view>
-      <view class="city-item" bindtap="selectCity" data-field="to">
-        <text class="city-label">到达</text>
-        <text class="city-name">{{toCity.name || '请选择'}}</text>
-        <text class="city-airport">{{toCity.airport || ''}}</text>
-      </view>
+    
+    <view class="input-row" bindtap="selectCity" data-field="to">
+      <text class="input-label">到达城市</text>
+      <text class="input-value">{{toCity.name || '请选择'}}</text>
     </view>
-
-    <!-- 日期选择 -->
-    <view class="date-row">
-      <view class="date-item" bindtap="selectDate" data-field="departDate">
-        <text class="date-label">出发日期</text>
-        <text class="date-value">{{departDate || '请选择'}}</text>
-      </view>
-      <view class="date-item" wx:if="{{tripType === 'round'}}" bindtap="selectDate" data-field="returnDate">
-        <text class="date-label">返程日期</text>
-        <text class="date-value">{{returnDate || '请选择'}}</text>
-      </view>
-    </view>
-
-    <!-- 乘客数量 -->
-    <view class="passenger-row" bindtap="selectPassenger">
-      <text class="passenger-label">乘客</text>
-      <text class="passenger-value">{{passengerCount}}位成人</text>
-      <image class="arrow-icon" src="/assets/icons/arrow-right.png" mode="aspectFit"></image>
-    </view>
-
-    <!-- 舱位选择 -->
-    <view class="cabin-row">
-      <view class="cabin-item {{cabinClass === 'economy' ? 'active' : ''}}" bindtap="setCabin" data-cabin="economy">经济舱</view>
-      <view class="cabin-item {{cabinClass === 'business' ? 'active' : ''}}" bindtap="setCabin" data-cabin="business">商务舱</view>
-      <view class="cabin-item {{cabinClass === 'first' ? 'active' : ''}}" bindtap="setCabin" data-cabin="first">头等舱</view>
+    
+    <view class="input-row">
+      <text class="input-label">出发日期</text>
+      <text class="input-value">{{departDate}}</text>
     </view>
   </view>
 
-  <!-- 搜索按钮 -->
-  <button class="search-btn" bindtap="searchFlights">
-    <image class="btn-icon" src="/assets/icons/search-white.png" mode="aspectFit"></image>
-    <text>搜索机票</text>
-  </button>
+  <button class="search-btn" bindtap="searchFlights">🔍 搜索机票</button>
 
-  <!-- 飞猪 AI Fly 插件入口 -->
-  <view class="plugin-card" bindtap="openFlyPigAI">
-    <view class="plugin-header">
-      <image class="plugin-logo" src="/assets/icons/flypig-logo.png" mode="aspectFit"></image>
-      <view class="plugin-info">
-        <text class="plugin-name">飞猪 AI Fly</text>
-        <text class="plugin-desc">智能推荐最优机票方案</text>
-      </view>
-    </view>
-    <view class="plugin-action">
-      <text>立即体验</text>
-      <text class="arrow">→</text>
-    </view>
+  <view class="tip" wx:if="{{flightList.length === 0 && searched}}">
+    <text>暂无符合条件的航班</text>
   </view>
 
-  <!-- 搜索结果 -->
-  <view class="results-section" wx:if="{{flightList.length > 0}}">
-    <view class="results-header">
-      <text class="results-title">搜索结果</text>
-      <view class="filter-btn" bindtap="showFilter">
-        <image class="filter-icon" src="/assets/icons/filter.png" mode="aspectFit"></image>
-        <text>筛选</text>
+  <view class="flight-list" wx:if="{{flightList.length > 0}}">
+    <view class="flight-card" wx:for="{{flightList}}" wx:key="id">
+      <view class="flight-main">
+        <text class="flight-no">{{item.flightNo}}</text>
+        <text class="flight-route">{{item.fromAirport}} → {{item.toAirport}}</text>
+        <text class="flight-time">{{item.departTime}} - {{item.arriveTime}}</text>
+        <text class="flight-price">¥{{item.price}}</text>
       </view>
     </view>
-
-    <view class="flight-list">
-      <view class="flight-card" wx:for="{{flightList}}" wx:key="id" bindtap="selectFlight" data-item="{{item}}">
-        <view class="flight-main">
-          <view class="flight-time">
-            <text class="time">{{item.departTime}}</text>
-            <text class="airport">{{item.fromAirport}}</text>
-          </view>
-          <view class="flight-duration">
-            <view class="duration-line">
-              <view class="dot"></view>
-              <view class="line"></view>
-              <view class="dot"></view>
-            </view>
-            <text class="duration-text">{{item.duration}}</text>
-            <text class="stop-text" wx:if="{{item.stops > 0}}">{{item.stops}}次中转</text>
-            <text class="direct-text" wx:else>直飞</text>
-          </view>
-          <view class="flight-time">
-            <text class="time">{{item.arriveTime}}</text>
-            <text class="airport">{{item.toAirport}}</text>
-          </view>
-        </view>
-        <view class="flight-info">
-          <image class="airline-logo" src="{{item.airlineLogo}}" mode="aspectFit"></image>
-          <text class="airline-name">{{item.airline}} {{item.flightNo}}</text>
-          <text class="flight-price">¥{{item.price}}</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 空状态 -->
-  <view class="empty-state" wx:if="{{searched && flightList.length === 0}}">
-    <image class="empty-icon" src="/assets/icons/empty-flight.png" mode="aspectFit"></image>
-    <text class="empty-text">暂无符合条件的航班</text>
-    <text class="empty-hint">请尝试修改搜索条件</text>
   </view>
 </view>
